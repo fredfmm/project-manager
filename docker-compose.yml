@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  account:
+    build: ./target/docker/fred/project-api/build
+    image: fred/project-api
+    container_name: project-api
+    ports:
+      - "8082:8080"
+      - "8083:8081"
+    depends_on:
+      - api-project-db
+    environment:
+      - DB_HOSTNAME=postgres.local
+      - DB_PORT=5432
+      - DB_NAME=postgres
+      - DB_USERNAME=postgres
+      - DB_PWD=postgres
+      - ACTIVE_PROFILE=local
+    links:
+      - api-project-db:postgres.local
+
+  project-api-db:
+    build: ./target/docker/fred/project-api-postgres-it/build
+    image: fred/project-api-postgres-it
+    container_name: project-api-postgres-it
+    environment:
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
