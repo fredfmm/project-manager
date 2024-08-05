@@ -7,7 +7,7 @@
 		<version>3.0.4</version>
 		<relativePath />
 	</parent>
-	<groupId>com.fred.projectapi</groupId>
+	<groupId>com.fred.project</groupId>
 	<artifactId>project-manager</artifactId>
 	<version>1.0.15</version>
 	<name>project-api</name>
@@ -287,9 +287,9 @@
 				<version>${jacoco-maven-plugin.version}</version>
 				<configuration>
 					<excludes>
-						<exclude>com/fred/projectapi/Application.class</exclude>
-						<exclude>com/fred/projectapi/exceptions/**</exclude>
-						<exclude>com/fred/projectapi/model/**</exclude>
+						<exclude>com/fred/project/Application.class</exclude>
+						<exclude>com/fred/project/exceptions/**</exclude>
+						<exclude>com/fred/project/model/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
