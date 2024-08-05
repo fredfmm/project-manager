@@ -12,5 +12,7 @@ import java.util.List;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
+    @Query("from Employee where assignment = :assignment")
+    List<Employee> findAllEmployeesByAssignment(@Param("assignment") Assignment assignment);
 
 }
