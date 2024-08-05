@@ -37,4 +37,21 @@ public class ProjectService {
 		projectRepository.save(project);
 	}
 
+	@Transactional
+	public void updateProject(final Long projectId, final ProjectRequest projectDetails) {
+		Project project = getProjectById(projectId);
+		Employee manager = validateAndGetManager(projectDetails.getManagerId());
+		updateProjectDetails(project, projectDetails, manager);
+		projectRepository.save(project);
+	}
+
+	@Transactional
+	public void deleteProject(final Long projectId) {
+		Project project = getProjectById(projectId);
+		validateProjectForDeletion(project);
+		employeeProjectService.deleteAllByProjectId(project.getId());
+		projectRepository.delete(project);
+	}
+
+
 }
