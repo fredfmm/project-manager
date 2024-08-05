@@ -28,14 +28,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
 
-
-  project-api_fred-cache:
-    image: redis:6.2.6-alpine
-    container_name: project-api_fred-cache
-    restart: always
-    ports:
-      - '6379:6379'
-
 volumes:
   project-api_fred-test-db:
     driver: local

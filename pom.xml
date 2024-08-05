@@ -205,8 +205,6 @@
 					<systemPropertyVariables>
 						<!--suppress UnresolvedMavenProperty -->
 						<it-database.port>${fred-project-api-postgres-it.port}</it-database.port>
-						<!--suppress UnresolvedMavenProperty -->
-						<it-redis.port>${fred-project-api-redis-it.port}</it-redis.port>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
@@ -227,19 +225,6 @@
 							<run>
 								<ports>
 									<port>fred-project-api-postgres-it.port:5432</port>
-								</ports>
-							</run>
-						</image>
-						<image>
-							<name>fred/fred-project-api-redis-it</name>
-							<alias>fred-project-api-redis-it</alias>
-							<build>
-								<dockerFileDir>${project.basedir}/src/main/resources/docker/redis</dockerFileDir>
-								<filter>@</filter>
-							</build>
-							<run>
-								<ports>
-									<port>fred-project-api-redis-it.port:6379</port>
 								</ports>
 							</run>
 						</image>
