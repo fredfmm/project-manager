@@ -45,7 +45,7 @@ CREATE ROLE lambda WITH
   NOCREATEROLE
   NOREPLICATION;
 
-ALTER ROLE lambda SET search_path TO "project_service, public";
+ALTER ROLE lambda SET search_path TO "projectapi_service, public";
 
 -- FUNCTION: public.uuid_generate_v4()
 
