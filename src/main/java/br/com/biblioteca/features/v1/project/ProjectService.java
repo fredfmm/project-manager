@@ -13,11 +13,28 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
 
-	
+	private final ProjectRepository projectRepository;
+	private final EmployeeService employeeService;
+	private final EmployeeProjectService employeeProjectService;
+
+	public List<Project> getAllProjects() {
+		return projectRepository.findAll();
+	}
+
+	@Transactional
+	public void createProject(final ProjectRequest projectRequest) {
+		Employee manager = validateAndGetManager(projectRequest.getManagerId());
+		Project project = buildProjectFromRequest(projectRequest, manager);
+		projectRepository.save(project);
+	}
+
 }
