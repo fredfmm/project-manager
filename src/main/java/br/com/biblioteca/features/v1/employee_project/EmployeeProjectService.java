@@ -10,5 +10,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeProjectService {
 
+    private final EmployeeProjectRepository employeeProjectRepository;
 
+    public void saveAll(final List<EmployeeProject> employeeProjects) {
+        employeeProjectRepository.saveAll(employeeProjects);
+    }
+
+    public List<EmployeeProject> findAllByProjectId(final Long projectId) {
+        return employeeProjectRepository.findAllByProjectId(projectId);
+    }
+
+    public void deleteAllByProjectId(final Long projectId) {
+        employeeProjectRepository.deleteAllByProjectId(projectId);
+    }
 }

@@ -12,4 +12,10 @@ import java.util.List;
 @Repository
 public interface EmployeeProjectRepository extends JpaRepository<EmployeeProject, Long> {
 
+    @Query("from EmployeeProject where project.id = :projectId")
+    List<EmployeeProject> findAllByProjectId(@Param("projectId") Long projectId);
+
+    @Modifying
+    @Query("DELETE FROM EmployeeProject ep WHERE ep.project.id = :projectId")
+    void deleteAllByProjectId(@Param("projectId") Long projectId);
 }
