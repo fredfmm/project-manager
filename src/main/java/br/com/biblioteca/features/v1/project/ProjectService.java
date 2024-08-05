@@ -53,5 +53,34 @@ public class ProjectService {
 		projectRepository.delete(project);
 	}
 
+	@Transactional
+	public void associateEmployees(final Long projectId, final List<Long> employeeIds) {
+		Project project = getProjectById(projectId);
+		List<EmployeeProject> employeeProjects = buildEmployeeProjectList(project, employeeIds);
+		employeeProjectService.deleteAllByProjectId(projectId);
+		employeeProjectService.saveAll(employeeProjects);
+	}
+
+	private Employee validateAndGetManager(final Long managerId) {
+		Employee manager = employeeService.findById(managerId)
+				.orElseThrow(() -> new NotFoundException("Employee not found with id: " + managerId));
+		if (!"GERENTE".equals(manager.getAssignment().name())) {
+			throw new IllegalArgumentException("Employee with id " + manager.getId() + " is not a manager.");
+		}
+		return manager;
+	}
+
+	public Project getProjectById(final Long projectId) {
+		return projectRepository.findById(projectId)
+				.orElseThrow(() -> new NotFoundException("Project not found with id: " + projectId));
+	}
+
+	private void validateProjectForDeletion(final Project project) {
+		if (project.getStatus() == Status.INICIADO || project.getStatus() == Status.EM_ANDAMENTO || project.getStatus() == Status.ENCERRADO) {
+			throw new IllegalArgumentException("Projects in status INICIADO, EM ANDAMENTO or ENCERRADO cannot be deleted");
+		}
+	}
+
+
 
 }

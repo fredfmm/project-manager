@@ -61,6 +61,22 @@ public class ProjectController {
 		}
 	}
 
+	@GetMapping("/edit/{projectId}")
+	public String showEditForm(@PathVariable Long projectId, Model model) {
+		Project project = projectService.getProjectById(projectId);
+		model.addAttribute(PROJECT, project);
+		return "edit-project";
+	}
+
+	@PutMapping("/update/{projectId}")
+	public ResponseEntity<String> updateProject(@PathVariable Long projectId, @RequestBody ProjectRequest projectRequest) {
+		try {
+			projectService.updateProject(projectId, projectRequest);
+			return ResponseEntity.ok().body("Project updated successfully.");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An error occurred while processing the request.");
+		}
+	}
 
 
 }
