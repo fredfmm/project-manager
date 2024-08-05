@@ -12,5 +12,15 @@ import java.util.List;
 @AllArgsConstructor
 public class EmployeeController {
 
+    private final EmployeeService employeeService;
 
+    @PostMapping
+    public Employee createEmployee(@RequestBody Employee employee) {
+        return employeeService.createEmployee(employee);
+    }
+
+    @GetMapping
+    public List<Employee> getAllManagers() {
+        return employeeService.findAllEmployeesByAssignment(Assignment.GERENTE);
+    }
 }
