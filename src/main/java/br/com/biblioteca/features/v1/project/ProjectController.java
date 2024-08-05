@@ -78,6 +78,34 @@ public class ProjectController {
 		}
 	}
 
+	@GetMapping("/associate/{projectId}")
+	public String showAssociateEmployeesForm(@PathVariable Long projectId, Model model) {
+		Map<String, Object> projectAndEmployees = projectService.getProjectAndEmployees(projectId);
+		model.addAttribute(PROJECT, projectAndEmployees.get(PROJECT));
+		model.addAttribute("employees", projectAndEmployees.get("employees"));
+		return "associate-employees";
+	}
+
+	@PostMapping("/associate/{projectId}")
+	public String associateEmployees(@PathVariable Long projectId, @RequestParam List<Long> employees, RedirectAttributes redirectAttributes) {
+		try {
+			projectService.associateEmployees(projectId, employees);
+			redirectAttributes.addFlashAttribute("success", "Employees associated successfully.");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("error", "Failed to associate employees.");
+		}
+		return "redirect:/project/list";
+	}
+
+	@PutMapping("/associate/{projectId}")
+	public ResponseEntity<String> associateEmployeesViaPut(@PathVariable Long projectId, @RequestBody List<Long> employeeIds) {
+		try {
+			projectService.associateEmployees(projectId, employeeIds);
+			return ResponseEntity.ok().body("Employees associated successfully.");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An error occurred while processing the request.");
+		}
+	}
 
 }
 

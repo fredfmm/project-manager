@@ -81,6 +81,60 @@ public class ProjectService {
 		}
 	}
 
+	private Project buildProjectFromRequest(final ProjectRequest projectRequest, final Employee manager) {
+		return Project.builder()
+				.name(projectRequest.getName())
+				.startDate(projectRequest.getStartDate())
+				.estimatedEndDate(projectRequest.getEstimatedEndDate())
+				.endDate(projectRequest.getEndDate())
+				.description(projectRequest.getDescription())
+				.status(projectRequest.getStatus())
+				.budget(projectRequest.getBudget())
+				.risk(projectRequest.getRisk())
+				.manager(manager)
+				.build();
+	}
 
+	private void updateProjectDetails(final Project project, final ProjectRequest projectDetails, final Employee manager) {
+		project.setName(projectDetails.getName());
+		project.setStartDate(projectDetails.getStartDate());
+		project.setManager(manager);
+		project.setEstimatedEndDate(projectDetails.getEstimatedEndDate());
+		project.setEndDate(projectDetails.getEndDate());
+		project.setBudget(projectDetails.getBudget());
+		project.setDescription(projectDetails.getDescription());
+		project.setStatus(projectDetails.getStatus());
+		project.setRisk(projectDetails.getRisk());
+	}
+
+	private List<EmployeeProject> buildEmployeeProjectList(final Project project, final List<Long> employeeIds) {
+		List<EmployeeProject> employeeProjects = new ArrayList<>();
+		for (Long employeeId : employeeIds) {
+			Employee employee = employeeService.findById(employeeId)
+					.orElseThrow(() -> new IllegalArgumentException("Employee not found"));
+			if (!"FUNCIONARIO".equals(employee.getAssignment().name())) {
+				throw new IllegalArgumentException("Employee with id " + employee.getId() + " is not a functionary.");
+			}
+			EmployeeProject employeeProject = new EmployeeProject();
+			employeeProject.setProject(project);
+			employeeProject.setEmployee(employee);
+			employeeProjects.add(employeeProject);
+		}
+		return employeeProjects;
+	}
+
+	public Map<String, Object> getProjectAndEmployees(final Long projectId) {
+		Project project = getProjectById(projectId);
+		List<Employee> employees = employeeService.findAllEmployeesByAssignment(Assignment.FUNCIONARIO);
+		List<EmployeeProject> employeesProject = employeeProjectService.findAllByProjectId(projectId);
+
+		employees.forEach(employee -> employee.setSelected(employeesProject.stream()
+				.anyMatch(ep -> ep.getEmployee().getId().equals(employee.getId()))));
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("project", project);
+		result.put("employees", employees);
+		return result;
+	}
 
 }
