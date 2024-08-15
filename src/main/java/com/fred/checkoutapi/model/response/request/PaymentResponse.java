@@ -1,53 +1,16 @@
-package com.fred.checkoutapi.model.request;
+package com.fred.checkoutapi.model.response.request;
 
 
-import com.fred.checkoutapi.model.enums.Risk;
-import com.fred.checkoutapi.model.enums.Status;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.*;
 
-import java.util.Date;
-
-import static lombok.AccessLevel.PRIVATE;
-
-@Data
-@Builder
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor(access = PRIVATE)
-public class ProjectRequest {
+public class PaymentResponse {
 
-    @NotNull(message = "message.name.mandatory")
-    private String name;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull(message = "message.startDate.mandatory")
-    private Date startDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull(message = "message.estimatedEndDate.mandatory")
-    private Date estimatedEndDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date endDate;
-
-    @NotNull(message = "message.description.mandatory")
-    private String description;
-
-    @NotNull(message = "message.status.mandatory")
-    private Status status;
-
-    @NotNull(message = "message.risk.mandatory")
-    private Risk risk;
-
-    @NotNull(message = "message.budget.mandatory")
-    private Double budget;
-
-    @NotNull(message = "message.managerId.mandatory")
-    private Long managerId;
-
+    private boolean success;
+    private String message;
 }
 

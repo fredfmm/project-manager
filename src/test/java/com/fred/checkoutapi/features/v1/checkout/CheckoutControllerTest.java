@@ -2,8 +2,8 @@ package com.fred.checkoutapi.features.v1.checkout;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fred.checkoutapi.model.entity.Order;
-import com.fred.checkoutapi.model.enums.Assignment;
+import com.fred.checkoutapi.model.entity.Checkout;
+import com.fred.checkoutapi.model.request.CheckoutRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -15,78 +15,78 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
+import static com.fred.checkoutapi.model.enums.CheckoutStatus.PENDING;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CheckoutController.class)
-class EmployeeControllerTest {
+class CheckoutControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private CheckoutService employeeService;
-
+    private CheckoutService checkoutService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    @Test
+    void getBalanceByProductSuccessTest() throws Exception {
+        UUID checkoutId = UUID.randomUUID();
+        Checkout checkout = Checkout.builder()
+                .id(checkoutId)
+                .customerName("teste")
+                .deliveryAddress("teste")
+                .customerEmail("teste")
+                .status(PENDING)
+                .quantity(2)
+                .productId(UUID.randomUUID())
+                .build();
+
+        when(checkoutService.findCheckoutById(checkoutId)).thenReturn(Optional.of(checkout));
+
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/checkout/" + checkoutId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        resultActions.andExpect(status().isOk());
+        verify(checkoutService).findCheckoutById(checkoutId);
     }
 
     @Test
-    void createEmployeeSuccessTest() throws Exception {
-        Order employee = Order.builder()
-                .name("John Doe")
-                .assignment(Assignment.FUNCIONARIO)
+    void createOrderSuccessTest() throws Exception {
+        Checkout request = Checkout.builder()
+                .id(UUID.randomUUID())
+                .customerName("teste")
+                .deliveryAddress("teste")
+                .customerEmail("teste")
+                .status(PENDING)
+                .quantity(2)
+                .productId(UUID.randomUUID())
                 .build();
 
-        when(employeeService.createEmployee(any(Order.class))).thenReturn(employee);
+        Checkout order = Checkout.builder()
+                .id(UUID.randomUUID())
+                .productId(request.getProductId())
+                .quantity(request.getQuantity())
+                .build();
 
-        String employeeJson = objectMapper.writeValueAsString(employee);
+        when(checkoutService.createOrder(any(CheckoutRequest.class))).thenReturn(order);
 
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/employee")
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/checkout/createOrder")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(employeeJson));
+                .content(requestJson));
 
-        resultActions.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("John Doe"))
-                .andExpect(jsonPath("$.assignment").value("FUNCIONARIO"));
+        resultActions.andExpect(status().isOk());
 
-        verify(employeeService).createEmployee(any(Order.class));
+        verify(checkoutService).createOrder(any(CheckoutRequest.class));
     }
 
-    @Test
-    void getAllManagersSuccessTest() throws Exception {
-        Order manager1 = Order.builder()
-                .name("Manager One")
-                .assignment(Assignment.GERENTE)
-                .build();
-
-        Order manager2 = Order.builder()
-                .name("Manager Two")
-                .assignment(Assignment.GERENTE)
-                .build();
-
-        List<Order> managers = List.of(manager1, manager2);
-
-        when(employeeService.findAllEmployeesByAssignment(Assignment.GERENTE)).thenReturn(managers);
-
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/employee")
-                .accept(MediaType.APPLICATION_JSON));
-
-        resultActions.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].name").value("Manager One"))
-                .andExpect(jsonPath("$[1].name").value("Manager Two"));
-
-        verify(employeeService).findAllEmployeesByAssignment(Assignment.GERENTE);
-    }
 }

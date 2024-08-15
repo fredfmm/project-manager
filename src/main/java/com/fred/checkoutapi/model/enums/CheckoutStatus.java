@@ -1,6 +1,6 @@
 package com.fred.checkoutapi.model.enums;
 
-public enum OrderStatus {
+public enum CheckoutStatus {
     PENDING,
     COMPLETED,
     CANCELED

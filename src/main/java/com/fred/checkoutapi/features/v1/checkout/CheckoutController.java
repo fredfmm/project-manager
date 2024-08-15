@@ -1,26 +1,31 @@
-package com.fred.projectapi.features.v1.employee;
+package com.fred.checkoutapi.features.v1.checkout;
 
-import com.fred.projectapi.model.entity.Employee;
-import com.fred.projectapi.model.enums.Assignment;
+import com.fred.checkoutapi.model.entity.Checkout;
+import com.fred.checkoutapi.model.request.CheckoutRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/api/employee")
+@RequestMapping(path = "/api/checkout")
 @AllArgsConstructor
-public class EmployeeController {
+public class CheckoutController {
 
-    private final EmployeeService employeeService;
+    private final CheckoutService checkoutService;
 
-    @PostMapping
-    public Employee createEmployee(@RequestBody Employee employee) {
-        return employeeService.createEmployee(employee);
+    @GetMapping(value = "/{checkoutId}")
+    public ResponseEntity<Checkout> getBalanceByProduct(
+            @PathVariable UUID checkoutId) {
+        return checkoutService.findCheckoutById(checkoutId)
+                .map(balance -> ResponseEntity.ok().body(balance))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping
-    public List<Employee> getAllManagers() {
-        return employeeService.findAllEmployeesByAssignment(Assignment.GERENTE);
+    @PostMapping("/createOrder")
+    public ResponseEntity<Checkout> createOrder(@RequestBody CheckoutRequest request) {
+        Checkout order = checkoutService.createOrder(request);
+        return ResponseEntity.ok(order);
     }
 }

@@ -1,4 +1,4 @@
-package com.fred.projectapi.exceptions;
+package com.fred.checkoutapi.exceptions;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.AllArgsConstructor;

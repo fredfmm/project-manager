@@ -1,4 +1,4 @@
-package com.fred.projectapi.exceptions;
+package com.fred.checkoutapi.exceptions;
 
 public class NotFoundException extends RuntimeException {
 

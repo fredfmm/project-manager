@@ -1,8 +1,13 @@
 package com.fred.checkoutapi.model.entity;
 
-import com.fred.checkoutapi.model.enums.OrderStatus;
-import jakarta.persistence.*;
+import com.fred.checkoutapi.model.enums.CheckoutStatus;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
+
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -10,12 +15,22 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class Order {
+public class Checkout extends AbstractAuditingEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private UUID id;
 
-	private OrderStatus status;
+	private CheckoutStatus status;
+
+	private UUID productId;
+
+	private Integer quantity;
+
+	private String customerName;
+
+	private String customerEmail;
+
+	private String deliveryAddress;
 
 }

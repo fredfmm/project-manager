@@ -7,11 +7,11 @@
 		<version>3.0.4</version>
 		<relativePath />
 	</parent>
-	<groupId>com.fred.projectapi</groupId>
-	<artifactId>project-api</artifactId>
+	<groupId>com.fred.checkoutapi</groupId>
+	<artifactId>checkout-api</artifactId>
 	<version>1.0.15</version>
-	<name>project-api</name>
-	<description>Microservice project</description>
+	<name>checkout-api</name>
+	<description>Microservice checkout</description>
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.3</spring-cloud.version>
@@ -94,7 +94,6 @@
             <version>2.0.1.Final</version>
             <scope>compile</scope>
         </dependency>
-
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -204,7 +203,7 @@
 					<reuseForks>true</reuseForks>
 					<systemPropertyVariables>
 						<!--suppress UnresolvedMavenProperty -->
-						<it-database.port>${fred-project-api-postgres-it.port}</it-database.port>
+						<it-database.port>${fred-checkout-api-postgres-it.port}</it-database.port>
 						<!--suppress UnresolvedMavenProperty -->
 					</systemPropertyVariables>
 				</configuration>
@@ -217,15 +216,15 @@
 				<configuration>
 					<images>
 						<image>
-							<name>fred/fred-project-api-postgres-it</name>
-							<alias>fred-project-api-postgres-it</alias>
+							<name>fred/fred-checkout-api-postgres-it</name>
+							<alias>fred-checkout-api-postgres-it</alias>
 							<build>
 								<dockerFileDir>${project.basedir}/src/main/resources/docker/postgresql</dockerFileDir>
 								<filter>@</filter>
 							</build>
 							<run>
 								<ports>
-									<port>fred-project-api-postgres-it.port:5432</port>
+									<port>fred-checkout-api-postgres-it.port:5432</port>
 								</ports>
 							</run>
 						</image>
@@ -259,8 +258,8 @@
 					<mode>kubernetes</mode>
 					<images>
 						<image>
-							<name>fred/fred-project-api</name>
-							<alias>fred-project-api</alias>
+							<name>fred/fred-checkout-api</name>
+							<alias>fred-checkout-api</alias>
 							<build>
 								<dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
 								<assembly>
@@ -287,9 +286,9 @@
 				<version>${jacoco-maven-plugin.version}</version>
 				<configuration>
 					<excludes>
-						<exclude>com/fred/projectapi/Application.class</exclude>
-						<exclude>com/fred/projectapi/exceptions/**</exclude>
-						<exclude>com/fred/projectapi/model/**</exclude>
+						<exclude>com/fred/checkoutapi/Application.class</exclude>
+						<exclude>com/fred/checkoutapi/exceptions/**</exclude>
+						<exclude>com/fred/checkoutapi/model/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>

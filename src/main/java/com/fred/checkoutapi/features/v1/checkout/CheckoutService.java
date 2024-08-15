@@ -1,30 +1,45 @@
 package com.fred.checkoutapi.features.v1.checkout;
 
-import com.fred.checkoutapi.model.entity.Employee;
-import com.fred.checkoutapi.model.enums.Assignment;
-import jakarta.transaction.Transactional;
+import com.fred.checkoutapi.client.PaymentClient;
+import com.fred.checkoutapi.model.entity.Checkout;
+import com.fred.checkoutapi.model.enums.CheckoutStatus;
+import com.fred.checkoutapi.model.request.CheckoutRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeService {
+public class CheckoutService {
 
-    private final EmployeeRepository employeeRepository;
+    private final CheckoutRepository checkoutRepository;
 
-    public List<Employee> findAllEmployeesByAssignment(final Assignment assignment) {
-        return employeeRepository.findAllEmployeesByAssignment(assignment);
+    private final PaymentClient paymentClient;
+
+    public Optional<Checkout> findCheckoutById(final UUID checkoutId) {
+        return checkoutRepository.findCheckoutById(checkoutId);
     }
 
-    @Transactional
-    public Employee createEmployee(final Employee employee) {
-        return employeeRepository.save(employee);
+    public Checkout createOrder(CheckoutRequest request) {
+        Checkout checkout = checkoutRepository.save(Checkout.builder()
+                .customerEmail(request.getCustomerEmail())
+                .customerName(request.getCustomerName())
+                .deliveryAddress(request.getDeliveryAddress())
+                .productId(request.getProductId())
+                .quantity(request.getQuantity())
+                .status(CheckoutStatus.PENDING)
+                .build());
+
+        paymentClient.processPayment(checkout.getId())
+                .ifPresent(paymentResponse -> {
+                    if (!paymentResponse.isSuccess()) {
+                        checkout.setStatus(CheckoutStatus.CANCELED);
+                        checkoutRepository.save(checkout);
+                    }
+                });
+        return checkout;
     }
 
-    public Optional<Employee> findById(final Long employeeId) {
-        return employeeRepository.findById(employeeId);
-    }
 }

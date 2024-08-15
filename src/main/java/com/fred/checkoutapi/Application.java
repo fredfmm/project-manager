@@ -1,4 +1,4 @@
-package com.fred.projectapi;
+package com.fred.checkoutapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
