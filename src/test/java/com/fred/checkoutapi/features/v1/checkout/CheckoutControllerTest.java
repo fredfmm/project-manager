@@ -1,9 +1,9 @@
-package com.fred.projectapi.features.v1.employee;
+package com.fred.checkoutapi.features.v1.checkout;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fred.projectapi.model.entity.Employee;
-import com.fred.projectapi.model.enums.Assignment;
+import com.fred.checkoutapi.model.entity.Order;
+import com.fred.checkoutapi.model.enums.Assignment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -22,14 +22,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(EmployeeController.class)
+@WebMvcTest(CheckoutController.class)
 class EmployeeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private EmployeeService employeeService;
+    private CheckoutService employeeService;
 
 
     @Autowired
@@ -42,12 +42,12 @@ class EmployeeControllerTest {
 
     @Test
     void createEmployeeSuccessTest() throws Exception {
-        Employee employee = Employee.builder()
+        Order employee = Order.builder()
                 .name("John Doe")
                 .assignment(Assignment.FUNCIONARIO)
                 .build();
 
-        when(employeeService.createEmployee(any(Employee.class))).thenReturn(employee);
+        when(employeeService.createEmployee(any(Order.class))).thenReturn(employee);
 
         String employeeJson = objectMapper.writeValueAsString(employee);
 
@@ -60,22 +60,22 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.name").value("John Doe"))
                 .andExpect(jsonPath("$.assignment").value("FUNCIONARIO"));
 
-        verify(employeeService).createEmployee(any(Employee.class));
+        verify(employeeService).createEmployee(any(Order.class));
     }
 
     @Test
     void getAllManagersSuccessTest() throws Exception {
-        Employee manager1 = Employee.builder()
+        Order manager1 = Order.builder()
                 .name("Manager One")
                 .assignment(Assignment.GERENTE)
                 .build();
 
-        Employee manager2 = Employee.builder()
+        Order manager2 = Order.builder()
                 .name("Manager Two")
                 .assignment(Assignment.GERENTE)
                 .build();
 
-        List<Employee> managers = List.of(manager1, manager2);
+        List<Order> managers = List.of(manager1, manager2);
 
         when(employeeService.findAllEmployeesByAssignment(Assignment.GERENTE)).thenReturn(managers);
 

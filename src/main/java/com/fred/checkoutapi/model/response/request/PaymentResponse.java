@@ -1,8 +1,8 @@
-package com.fred.projectapi.model.request;
+package com.fred.checkoutapi.model.request;
 
 
-import com.fred.projectapi.model.enums.Risk;
-import com.fred.projectapi.model.enums.Status;
+import com.fred.checkoutapi.model.enums.Risk;
+import com.fred.checkoutapi.model.enums.Status;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

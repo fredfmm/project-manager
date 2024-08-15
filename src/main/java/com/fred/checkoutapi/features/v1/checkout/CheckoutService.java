@@ -1,7 +1,7 @@
-package com.fred.projectapi.features.v1.employee;
+package com.fred.checkoutapi.features.v1.checkout;
 
-import com.fred.projectapi.model.entity.Employee;
-import com.fred.projectapi.model.enums.Assignment;
+import com.fred.checkoutapi.model.entity.Employee;
+import com.fred.checkoutapi.model.enums.Assignment;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

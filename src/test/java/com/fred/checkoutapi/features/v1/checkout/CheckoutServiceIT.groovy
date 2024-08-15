@@ -1,7 +1,7 @@
-package com.fred.projectapi.features.v1.employee
+package com.fred.checkoutapi.features.v1.checkout
 
-import com.fred.projectapi.model.entity.Employee
-import com.fred.projectapi.model.enums.Assignment
+import com.fred.checkoutapi.model.entity.Order
+import com.fred.checkoutapi.model.enums.Assignment
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -12,13 +12,13 @@ import spock.lang.Specification
 class EmployeeServiceIT extends Specification {
 
     @Autowired
-    EmployeeService employeeService
+    CheckoutService employeeService
 
     def "should find all employees by assignment"() {
         given: "a list of employees with a specific assignment"
-        def employee1 = Employee.builder().name("Manager One")
+        def employee1 = Order.builder().name("Manager One")
                 .assignment(Assignment.GERENTE).build()
-        def employee2 = Employee.builder().name("Manager Two")
+        def employee2 = Order.builder().name("Manager Two")
                 .assignment(Assignment.GERENTE).build()
 
         when: "finding employees by assignment"
@@ -34,7 +34,7 @@ class EmployeeServiceIT extends Specification {
 
     def "should create a new employee"() {
         given: "an employee to be created"
-        def employee = Employee.builder().name("John Doe")
+        def employee = Order.builder().name("John Doe")
         .assignment(Assignment.FUNCIONARIO).build()
 
         when: "the employee is created"
@@ -47,7 +47,7 @@ class EmployeeServiceIT extends Specification {
 
     def "should find an employee by id"() {
         given: "an existing employee"
-        def employee = Employee.builder().name("John Doe")
+        def employee = Order.builder().name("John Doe")
                 .assignment(Assignment.FUNCIONARIO).build()
 
         when: "finding the employee by id"
